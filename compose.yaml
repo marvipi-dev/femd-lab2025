@@ -6,4 +6,21 @@
       dockerfile: Lab2025/Dockerfile
     ports:
       - "8080:8080"
-      - "8081:8081"
+    networks:
+      - backend
+    environment:
+      ASPNETCORE_ConnectionString__DbCreation: ${CONNECTION_STRING_DBCREATION}
+      ASPNETCORE_ConnectionString__Default: ${CONNECTION_STRING_DEFAULT}
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    networks:
+      - backend
+    environment:
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      ACCEPT_EULA: ${ACCEPT_EULA}
+
+networks:
+  backend:
