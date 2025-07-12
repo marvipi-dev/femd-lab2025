@@ -1,0 +1,9 @@
+﻿services:
+  lab2025:
+    image: lab2025
+    build:
+      context: .
+      dockerfile: Lab2025/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
