@@ -2,6 +2,7 @@ using Lab2025.Data;
 using Lab2025.Models;
 using Lab2025.Views;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace Lab2025.Controllers
 {
@@ -9,11 +10,11 @@ namespace Lab2025.Controllers
     [ApiController]
     public class PalestrasController : ControllerBase
     {
-        private readonly IPalestrasRepository _palestrasRepository;
+        private readonly IPalestrasRepository _repository;
 
-        public PalestrasController(IPalestrasRepository palestrasRepository)
+        public PalestrasController(IPalestrasRepository repository)
         {
-            _palestrasRepository = palestrasRepository;
+            _repository = repository;
         }
         
         [HttpGet]
@@ -24,9 +25,9 @@ namespace Lab2025.Controllers
             IEnumerable<PalestraModel> palestras;
             try
             {
-                palestras = await _palestrasRepository.ReadAsync();
+                palestras = await _repository.ReadAsync();
             }
-            catch
+            catch (SqlException _)
             {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
@@ -43,7 +44,8 @@ namespace Lab2025.Controllers
 
         [HttpPost]
         [ProducesResponseType(statusCode: StatusCodes.Status503ServiceUnavailable)]
-        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
         public async Task<ActionResult> Post(PalestrasPostRequest postRequest)
         {
             bool successfulWrite;
@@ -54,23 +56,22 @@ namespace Lab2025.Controllers
                 Descricao = postRequest.Descricao,
                 DataHora = postRequest.DataHora.ToUniversalTime()
             };
-            var unavailable = StatusCode(StatusCodes.Status503ServiceUnavailable);
             
             try
             {
-                successfulWrite = await _palestrasRepository.WriteAsync(newPalestra);
+                successfulWrite = await _repository.WriteAsync(newPalestra);
             }
-            catch
+            catch (SqlException _)
             {
-                return unavailable;
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
 
             if (!successfulWrite)
             {
-                return unavailable;
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok();
+            return Created();
         }
     }
 }
