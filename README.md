@@ -27,6 +27,7 @@ docker compose build
 ```bash
 docker compose up
 ```
+5. Acesse o Swagger em http://localhost:8080/swagger/index.html
 
 ## Design
 ![Swagger](femd-design.png)
