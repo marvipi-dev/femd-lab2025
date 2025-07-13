@@ -1,0 +1,10 @@
+namespace Lab2025.Views;
+
+public record ParticipantesGetResponse
+{
+    public required Guid Id { get; init; }
+    public required Guid PalestraId { get; init; }
+    public required string Nome { get; init; }
+    public required string Email { get; init; }
+    public required string Telefone { get; init; }
+}

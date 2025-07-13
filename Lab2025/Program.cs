@@ -15,6 +15,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IConnectionStrings, ConnectionStrings>();
 builder.Services.AddScoped<IPalestrasRepository, PalestrasRepository>();
+builder.Services.AddScoped<IParticipantesRepository, ParticipantesRepository>();
 
 var app = builder.Build();
 
