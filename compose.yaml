@@ -9,6 +9,7 @@
     networks:
       - backend
     environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       ASPNETCORE_ConnectionString__DbCreation: ${CONNECTION_STRING_DBCREATION}
       ASPNETCORE_ConnectionString__Default: ${CONNECTION_STRING_DEFAULT}
 
